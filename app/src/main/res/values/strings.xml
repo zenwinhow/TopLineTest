@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">TopLine104022021037</string>
+    <string name="title_activity_main_activity2.java">MainActivity2.java</string>
+
+    <!-- 各类黑马程序员方向的文字资源 -->
+    <string name="android">黑马程序员.Android</string>
+    <string name="java">黑马程序员.Java</string>
+    <string name="php">黑马程序员.PHP</string>
+    <string name="python">黑马程序员.Python</string>
+    <string name="c">黑马程序员.C/C++</string>
+    <string name="ios">黑马程序员.iOS</string>
+    <string name="fore_end">黑马程序员.前端与移动开发</string>
+    <string name="ui">黑马程序员.UI 设计</string>
+    <string name="network">黑马程序员.网络营销</string>
+    <string name="android_count_text">黑马程序员Android+物联网课程全面升级，以下是薪资的高低所占的比例饼状图：</string>
+    <string name="java_count_text">以下是JavaEE工程师不同的工作经验所对应的不同薪资情况，具体如折线图与柱状图所示：</string>
+
+</resources>

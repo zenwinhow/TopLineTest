@@ -1,0 +1,43 @@
+apply plugin: 'com.android.application'
+
+android {
+    namespace "com.zhengwenhao.topline104022021037"
+    compileSdk 34
+    // 这里使用你的实际包名
+
+    defaultConfig {
+        applicationId "com.zhengwenhao.topline104022021037"
+        minSdk 21
+        targetSdk 30
+        versionCode 1
+        versionName "1.0"
+    }
+    buildFeatures {
+        viewBinding true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.activity:activity:1.8.0' // 本身是 Java 写的，可保留
+    implementation 'androidx.recyclerview:recyclerview:1.3.0'
+    implementation 'com.google.code.gson:gson:2.12.1'
+
+    implementation project(':PullToRefresh')
+    implementation files('libs/glide-3.7.0.jar')
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.navigation:navigation-fragment:2.8.9'
+    implementation 'androidx.navigation:navigation-ui:2.8.9'
+    implementation 'com.squareup.okhttp:okhttp:2.7.5'
+    implementation project(':boommenu')
+    implementation project(':hellocharts-library')
+
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 帧动画资源定义文件 -->
+<animation-list android:oneshot="false"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 第一帧：显示 app_loading_0 图像，持续 150 毫秒 -->
+    <item android:duration="150" android:drawable="@drawable/app_loading_0" />
+
+    <!-- 第二帧：显示 app_loading_1 图像，持续 150 毫秒 -->
+    <item android:duration="150" android:drawable="@drawable/app_loading_1" />
+
+</animation-list>

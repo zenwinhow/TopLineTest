@@ -1,0 +1,22 @@
+apply plugin: 'com.android.library'
+
+android {
+    namespace 'lecho.lib.hellocharts'
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 30
+    }
+    aaptOptions {
+        cruncherEnabled = false
+        useNewCruncher = false
+    }
+    dependencies {
+        //compile fileTree(dir: 'libs', include: '*.jar')
+        implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    }
+    buildFeatures {
+        buildConfig true
+    }
+}

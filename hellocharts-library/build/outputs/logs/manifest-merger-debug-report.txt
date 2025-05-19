@@ -1,0 +1,21 @@
+-- Merging decision tree log ---
+manifest
+ADDED from E:\TopLine104022021037\hellocharts-library\src\main\AndroidManifest.xml:2:1-10:12
+INJECTED from E:\TopLine104022021037\hellocharts-library\src\main\AndroidManifest.xml:2:1-10:12
+	package
+		ADDED from E:\TopLine104022021037\hellocharts-library\src\main\AndroidManifest.xml:4:5-36
+		INJECTED from E:\TopLine104022021037\hellocharts-library\src\main\AndroidManifest.xml
+	android:versionName
+		ADDED from E:\TopLine104022021037\hellocharts-library\src\main\AndroidManifest.xml:6:5-32
+	xmlns:android
+		ADDED from E:\TopLine104022021037\hellocharts-library\src\main\AndroidManifest.xml:2:11-69
+	android:versionCode
+		ADDED from E:\TopLine104022021037\hellocharts-library\src\main\AndroidManifest.xml:5:5-29
+uses-sdk
+INJECTED from E:\TopLine104022021037\hellocharts-library\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from E:\TopLine104022021037\hellocharts-library\src\main\AndroidManifest.xml
+INJECTED from E:\TopLine104022021037\hellocharts-library\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from E:\TopLine104022021037\hellocharts-library\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from E:\TopLine104022021037\hellocharts-library\src\main\AndroidManifest.xml
