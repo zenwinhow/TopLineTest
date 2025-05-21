@@ -5,4 +5,5 @@
     <color name="colorAccent">#D81B60</color>
     <color name="rdTextColorNormal">#999999</color>
     <color name="rdTextColorPress">#eb413d</color>
+    <color name="rb_text_check">#ff5200</color>
 </resources>
