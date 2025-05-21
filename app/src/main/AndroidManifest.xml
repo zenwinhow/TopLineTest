@@ -13,6 +13,9 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.VideoDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.JavaCountActivity"
             android:exported="false" />
         <activity

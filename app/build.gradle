@@ -39,5 +39,6 @@ dependencies {
     implementation 'com.squareup.okhttp:okhttp:2.7.5'
     implementation project(':boommenu')
     implementation project(':hellocharts-library')
+    implementation 'com.android.support:design:25.3.1'
 
 }
