@@ -40,5 +40,6 @@ dependencies {
     implementation project(':boommenu')
     implementation project(':hellocharts-library')
     implementation 'com.android.support:design:25.3.1'
+    implementation files('libs\\CCSDK.jar')
 
 }
