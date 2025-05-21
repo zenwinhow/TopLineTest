@@ -24,4 +24,23 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="playBottomTextViewStyle" parent="android:Widget.Holo.Light.TextView">
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:visibility">gone</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="rbStyle">
+        <item name="android:button">@null</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:textColor">@drawable/play_rb_textcolor</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+
 </resources>

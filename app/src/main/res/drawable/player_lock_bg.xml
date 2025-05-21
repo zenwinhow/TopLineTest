@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 锁定状态时使用 lock_ic 图标 -->
+    <item android:drawable="@drawable/lock_ic" android:state_selected="true" />
+
+    <!-- 非锁定状态时使用 unlock_ic 图标 -->
+    <item android:drawable="@drawable/unlock_ic" android:state_selected="false" />
+</selector>
