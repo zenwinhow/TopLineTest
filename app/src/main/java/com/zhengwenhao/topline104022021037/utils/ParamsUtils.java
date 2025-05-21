@@ -26,7 +26,7 @@ public class ParamsUtils {
     /**
      * 把时间（秒）转换成 hh:mm:ss 格式的字符串
      */
-    public static String millisecondsToStr(int seconds) {
+    public static String millsecondsToStr(int seconds) {
         seconds = seconds / 1000; // 转换为秒
         String result = "";
         int hour = 0, min = 0, second = 0;

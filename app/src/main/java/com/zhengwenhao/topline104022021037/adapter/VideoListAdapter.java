@@ -1,6 +1,7 @@
 package com.zhengwenhao.topline104022021037.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.zhengwenhao.topline104022021037.R;
+import com.zhengwenhao.topline104022021037.activity.VideoDetailActivity;
 import com.zhengwenhao.topline104022021037.bean.VideoBean;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class VideoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -50,7 +53,10 @@ public class VideoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 点击后执行的逻辑，如跳转播放页等
+                Intent intent = new Intent(context, VideoDetailActivity.class);
+                intent.putExtra("intro", bean.getIntro());
+                intent.putExtra("videoDetailList", (Serializable) bean.getVideoDetailList());
+                context.startActivity(intent);
             }
         });
     }
