@@ -5,8 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.zhengwenhao.topline104022021037.bean.NewsBean;
 import com.zhengwenhao.topline104022021037.sqlite.SQLiteHelper;
 import com.zhengwenhao.topline104022021037.bean.UserBean;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * SQLite 数据库工具类（单例封装）
@@ -106,5 +110,81 @@ public class DBUtils {
         db.update(SQLiteHelper.U_USERINFO, cv, "userName=?", new String[]{userName});
     }
 
+    /**
+     * 保存收藏信息
+     * <p>
+     * 方法功能：将 NewsBean 实例的数据及用户名插入收藏表。
+     * 用 ContentValues 封装字段，db.insert() 方法插入到数据库表中。
+     * 表名常量 COLLECTION_NEWS_INFO 来自 SQLiteHelper。
+     */
+    public void saveCollectionNewsInfo(NewsBean bean, String userName) {
+        ContentValues cv = new ContentValues();
+        cv.put("id", bean.getId());
+        cv.put("type", bean.getType());
+        cv.put("userName", userName);
+        cv.put("newsName", bean.getNewsName());
+        cv.put("newsTypeName", bean.getNewsTypeName());
+        cv.put("img1", bean.getImg1());
+        cv.put("img2", bean.getImg2());
+        cv.put("img3", bean.getImg3());
+        cv.put("newsUrl", bean.getNewsUrl());
+        db.insert(SQLiteHelper.COLLECTION_NEWS_INFO, null, cv);
+    }
 
+    /**
+     * 获取收藏信息
+     */
+    public List<NewsBean> getCollectionNewsInfo(String userName) {
+        String sql = "SELECT * FROM " + SQLiteHelper.COLLECTION_NEWS_INFO
+                + " WHERE userName = ?;";
+        Cursor cursor = db.rawQuery(sql, new String[]{userName});
+        List<NewsBean> newsList = new ArrayList<>();
+        NewsBean bean = null;
+        while (cursor.moveToNext()) {
+            bean = new NewsBean();
+            // 填充新闻对象属性
+            bean.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+            bean.setType(cursor.getInt(cursor.getColumnIndexOrThrow("type")));
+            bean.setNewsName(cursor.getString(cursor.getColumnIndexOrThrow("newsName")));
+            bean.setNewsTypeName(cursor.getString(cursor.getColumnIndexOrThrow("newsTypeName")));
+            bean.setImg1(cursor.getString(cursor.getColumnIndexOrThrow("img1")));
+            bean.setImg2(cursor.getString(cursor.getColumnIndexOrThrow("img2")));
+            bean.setImg3(cursor.getString(cursor.getColumnIndexOrThrow("img3")));
+            bean.setNewsUrl(cursor.getString(cursor.getColumnIndexOrThrow("newsUrl")));
+            newsList.add(bean); // 添加到结果列表
+        }
+        cursor.close();
+        return newsList;
+    }
+
+    /**
+     * 判断一条新闻是否被收藏
+     */
+    public boolean hasCollectionNewsInfo(int id, int type, String userName) {
+        boolean hasNewsInfo = false;
+        String sql = "SELECT * FROM " + SQLiteHelper.COLLECTION_NEWS_INFO
+                + " WHERE id=? AND type=? AND userName=?";
+        Cursor cursor = db.rawQuery(sql, new String[]{String.valueOf(id), String.valueOf(type), userName});
+        if (cursor.moveToFirst()) {
+            hasNewsInfo = true;
+        }
+        cursor.close();
+        return hasNewsInfo;
+    }
+
+    /**
+     * 删除某一条收藏信息
+     */
+    public boolean delCollectionNewsInfo(int id, int type, String userName) {
+        boolean delSuccess = false;
+        if (hasCollectionNewsInfo(id, type, userName)) {
+            int row = db.delete(SQLiteHelper.COLLECTION_NEWS_INFO,
+                    "id=? AND type=? AND userName=?",
+                    new String[]{String.valueOf(id), String.valueOf(type), userName});
+            if (row > 0) {
+                delSuccess = true;
+            }
+        }
+        return delSuccess;
+    }
 }

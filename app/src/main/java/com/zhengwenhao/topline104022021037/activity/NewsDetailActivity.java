@@ -1,5 +1,6 @@
 package com.zhengwenhao.topline104022021037.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
@@ -10,11 +11,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.zhengwenhao.topline104022021037.R;
 import com.zhengwenhao.topline104022021037.bean.NewsBean;
+import com.zhengwenhao.topline104022021037.utils.DBUtils;
+import com.zhengwenhao.topline104022021037.utils.UtilsHelper;
 // import com.zhengwenhao.topline104022021037.view.SwipeBackLayout; // ← 已注释
 
 public class NewsDetailActivity extends AppCompatActivity {
@@ -27,6 +31,9 @@ public class NewsDetailActivity extends AppCompatActivity {
     private String newsUrl;                   // 新闻详情页链接
     private NewsBean bean;                    // 新闻数据实体类
     private String position;                  // 位置标识（如列表位置）
+    private boolean isCollection = false;     // 收藏状态
+    private DBUtils db;                       // 数据库操作类实例
+    private  String userName;                 // 用户名
     private LinearLayout ll_loading;          // 加载动画控件
 
     @Override
@@ -41,9 +48,11 @@ public class NewsDetailActivity extends AppCompatActivity {
         bean = (NewsBean) getIntent().getSerializableExtra("newsBean");
         position = getIntent().getStringExtra("position");
 
-        if (bean == null) return;
+        if (bean == null) return; // 如果没有传入数据，则返回
+        db = DBUtils.getInstance(NewsDetailActivity.this);
 
-        newsUrl = bean.getNewsUrl();
+        newsUrl = bean.getNewsUrl(); // 获取新闻详情页链接
+        userName = UtilsHelper.readLoginUserName(NewsDetailActivity.this); // 获取当前登录用户名
         init();         // 初始化控件
         initWebView();  // 设置 WebView 属性并加载网页
     }
@@ -60,6 +69,14 @@ public class NewsDetailActivity extends AppCompatActivity {
         iv_collection = findViewById(R.id.iv_collection);
         iv_collection.setVisibility(View.VISIBLE);
 
+        if (db.hasCollectionNewsInfo(bean.getId(), bean.getType(), userName)) {
+            iv_collection.setImageResource(R.drawable.collection_selected);
+            isCollection = true;
+        } else {
+            iv_collection.setImageResource(R.drawable.collection_normal);
+            isCollection = false;
+        }
+
         tv_back = findViewById(R.id.tv_back);
         tv_back.setVisibility(View.VISIBLE);
         tv_back.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +90,31 @@ public class NewsDetailActivity extends AppCompatActivity {
         iv_collection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 收藏功能未实现
+                if (UtilsHelper.readLoginStatus(NewsDetailActivity.this)) { // 判断用户是否登录
+                    if (isCollection) {
+                        // 当前已收藏，执行取消收藏操作
+                        iv_collection.setImageResource(R.drawable.collection_normal);
+                        isCollection = false;
+                        // 从收藏数据库中删除
+                        db.delCollectionNewsInfo(bean.getId(), bean.getType(), userName);
+                        Toast.makeText(NewsDetailActivity.this, "取消收藏", Toast.LENGTH_SHORT).show();
+                        // 通知上一个页面，当前项被取消收藏
+                        Intent data = new Intent();
+                        data.putExtra("position", position);
+                        setResult(RESULT_OK, data);
+                    } else {
+                        // 当前未收藏，执行收藏操作
+                        iv_collection.setImageResource(R.drawable.collection_selected);
+                        isCollection = true;
+                        // 保存到收藏数据库
+                        db.saveCollectionNewsInfo(bean, userName);
+                        Toast.makeText(NewsDetailActivity.this, "收藏成功", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    // 未登录提示
+                    Toast.makeText(NewsDetailActivity.this, "您还未登录, 请先登录", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }

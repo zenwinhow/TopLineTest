@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhengwenhao.topline104022021037.view.SlidingButtonView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_marginBottom="1dp"
+    android:background="@android:color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- 删除按钮 -->
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/layout_content"
+            android:background="@drawable/collection_red_del_selector"
+            android:gravity="center"
+            android:text="删除"
+            android:textColor="#DDFFFFFF" />
+
+        <!-- 收藏内容区域 -->
+        <RelativeLayout
+            android:id="@+id/layout_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/collection_btn_black_background"
+            android:padding="8dp">
+<!--            android:background="@drawable/collection_item_selector"-->
+
+            <!-- 图片 -->
+            <ImageView
+                android:id="@+id/iv_img"
+                android:layout_width="100dp"
+                android:layout_height="80dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:scaleType="fitXY" />
+
+            <!-- 标题和类型 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/iv_img"
+                android:orientation="vertical">
+
+                <!-- 标题 -->
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <!-- 类型 -->
+                <TextView
+                    android:id="@+id/tv_newsType_name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+</com.zhengwenhao.topline104022021037.view.SlidingButtonView>

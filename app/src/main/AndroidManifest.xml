@@ -15,6 +15,9 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.CollectionActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ChangeUserInfoActivity"
             android:exported="false" />
         <activity
