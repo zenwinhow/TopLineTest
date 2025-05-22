@@ -24,6 +24,7 @@ import com.zhengwenhao.topline104022021037.activity.LoginActivity;
 import com.zhengwenhao.topline104022021037.receiver.UpdateUserInfoReceiver;
 import com.zhengwenhao.topline104022021037.utils.DBUtils;
 import com.zhengwenhao.topline104022021037.utils.UtilsHelper;
+import com.zhengwenhao.topline104022021037.activity.UserInfoActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -139,7 +140,9 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             }
         } else if (id == R.id.iv_avatar) {
             if (isLogin) {
-                // TODO:跳转到“个人资料”界面
+                // 跳转到“个人资料”界面
+                Intent userinfo = new Intent(getActivity(), UserInfoActivity.class);
+                startActivity(userinfo);
             } else {
                 // 跳转到“登录”界面
                 Intent login = new Intent(getActivity(), LoginActivity.class);
