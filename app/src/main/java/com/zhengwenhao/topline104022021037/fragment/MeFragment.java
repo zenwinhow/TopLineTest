@@ -20,6 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.zhengwenhao.topline104022021037.R;
+import com.zhengwenhao.topline104022021037.activity.CollectionActivity;
 import com.zhengwenhao.topline104022021037.activity.LoginActivity;
 import com.zhengwenhao.topline104022021037.receiver.UpdateUserInfoReceiver;
 import com.zhengwenhao.topline104022021037.utils.DBUtils;
@@ -128,7 +129,9 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             // TODO:跳转到地图界面（待实现）
         } else if (id == R.id.rl_collection) {
             if (isLogin) {
-                // TODO:跳转到“收藏”界面
+                // 跳转到“收藏”界面
+                Intent collection = new Intent(getActivity(), CollectionActivity.class);
+                startActivity(collection);
             } else {
                 Toast.makeText(getActivity(), "您还未登录，请先登录", Toast.LENGTH_SHORT).show();
             }

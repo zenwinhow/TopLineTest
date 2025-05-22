@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_collection"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 垂直布局：包含标题栏和RecyclerView -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- 标题栏，复用layout/main_title_bar.xml -->
+        <include layout="@layout/main_title_bar" />
+
+        <!-- 列表控件，显示收藏内容 -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#EEEEEE" />
+    </LinearLayout>
+
+    <!-- 空状态提示 -->
+    <TextView
+        android:id="@+id/tv_none"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="暂无收藏信息"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+</RelativeLayout>
