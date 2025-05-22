@@ -20,6 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.zhengwenhao.topline104022021037.R;
+import com.zhengwenhao.topline104022021037.activity.LoginActivity;
 import com.zhengwenhao.topline104022021037.receiver.UpdateUserInfoReceiver;
 import com.zhengwenhao.topline104022021037.utils.DBUtils;
 import com.zhengwenhao.topline104022021037.utils.UtilsHelper;
@@ -117,30 +118,32 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         int id = view.getId();
 
         if (id == R.id.ll_calendar) {
-            // 跳转到日历界面（待实现）
+            // TODO:跳转到日历界面（待实现）
         } else if (id == R.id.ll_constellation) {
-            // 跳转到星座界面（待实现）
+            // TODO:跳转到星座界面（待实现）
         } else if (id == R.id.ll_scraw) {
-            // 跳转到涂鸦界面（待实现）
+            // TODO:跳转到涂鸦界面（待实现）
         } else if (id == R.id.ll_map) {
-            // 跳转到地图界面（待实现）
+            // TODO:跳转到地图界面（待实现）
         } else if (id == R.id.rl_collection) {
             if (isLogin) {
-                // 跳转到“收藏”界面
+                // TODO:跳转到“收藏”界面
             } else {
                 Toast.makeText(getActivity(), "您还未登录，请先登录", Toast.LENGTH_SHORT).show();
             }
         } else if (id == R.id.rl_setting) {
             if (isLogin) {
-                // 跳转到“设置”界面
+                // TODO:跳转到“设置”界面
             } else {
                 Toast.makeText(getActivity(), "您还未登录，请先登录", Toast.LENGTH_SHORT).show();
             }
         } else if (id == R.id.iv_avatar) {
             if (isLogin) {
-                // 跳转到“个人资料”界面
+                // TODO:跳转到“个人资料”界面
             } else {
                 // 跳转到“登录”界面
+                Intent login = new Intent(getActivity(), LoginActivity.class);
+                startActivityForResult(login, 1);
             }
         }
 
