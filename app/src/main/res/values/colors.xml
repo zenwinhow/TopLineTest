@@ -9,4 +9,7 @@
     <color name="video_detail_text_color">#333333</color>
     <color name="starTextColor">#999999</color>
     <color name="divider_line_color">#ebebeb</color>
+    <color name="register_bg_color">#f6f6f6</color>
+    <color name="register_hint_text_color">#a3a3a3</color>
+    <color name="register_btn_color">#d6d7d7</color>
 </resources>
