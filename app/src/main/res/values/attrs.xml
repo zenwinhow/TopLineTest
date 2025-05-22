@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 自定义属性集合，用于 AvatarImageBehavior -->
+    <declare-styleable name="AvatarImageBehavior">
+
+        <attr name="finalSize" format="dimension" />
+        <!-- 最终头像的尺寸 -->
+
+        <attr name="finalX" format="dimension" />
+        <!-- 最终头像的X轴坐标 -->
+
+        <attr name="toolBarHeight" format="dimension" />
+        <!-- ToolBar 的高度，用于计算头像位置 -->
+
+        <attr name="finalYPosition" format="dimension" />
+        <!-- 最终 Y 坐标，备用字段 -->
+
+        <attr name="startXPosition" format="dimension" />
+        <!-- 初始 X 坐标，备用字段 -->
+
+        <attr name="startToolbarPosition" format="dimension" />
+        <!-- ToolBar 初始位置，备用字段 -->
+
+        <attr name="startHeight" format="dimension" />
+        <!-- 初始头像高度，备用字段 -->
+
+        <attr name="finalHeight" format="dimension" />
+        <!-- 最终头像高度，备用字段 -->
+
+    </declare-styleable>
+</resources>
