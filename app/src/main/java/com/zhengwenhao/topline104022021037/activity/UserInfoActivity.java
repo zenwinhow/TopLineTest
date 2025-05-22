@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -43,6 +44,8 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
     private RelativeLayout rl_nickName, rl_sex, rl_signature, rl_head, rl_title_bar;
     private String spUserName;
     private static final int CROP_PHOTO1 = 3; // 裁剪图片请求码1
+    private static final int CHANGE_NICKNAME = 1;    // 修改昵称的自定义常量
+    private static final int CHANGE_SIGNATURE = 2;  // 修改签名的自定义常量
     private static final int CROP_PHOTO2 = 4; // 裁剪图片请求码2
     private static final int SAVE_PHOTO = 5;  // 保存图片请求码
     private ImageViewRoundOval iv_photo; // 头像控件
@@ -188,14 +191,24 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
             this.finish();
         } else if (id == R.id.rl_nickName) {
             // 修改昵称
-            // TODO: 打开昵称修改对话框
+            String name = tv_nickName.getText().toString(); // 获取昵称控件上的数据
+            Bundle bdName = new Bundle();
+            bdName.putString("content", name);              // 传递界面上的昵称数据
+            bdName.putString("title", "昵称");
+            bdName.putInt("flag", 1);                       // flag 传递 1 时表示修改昵称
+            enterActivityForResult(ChangeUserInfoActivity.class, CHANGE_NICKNAME, bdName); // 跳转到个人资料修改界面
         } else if (id == R.id.rl_sex) {
             // 性别选择
             String sex = tv_sex.getText().toString();
             sexDialog(sex);
         } else if (id == R.id.rl_signature) {
             // 修改签名
-            // TODO: 打开签名修改对话框
+            String signature = tv_signature.getText().toString();  // 获取签名控件上的数据
+            Bundle bdSignature = new Bundle();
+            bdSignature.putString("content", signature);          // 传递界面上的签名数据
+            bdSignature.putString("title", "签名");
+            bdSignature.putInt("flag", 2);                        // flag 传递 2 时表示修改签名
+            enterActivityForResult(ChangeUserInfoActivity.class, CHANGE_SIGNATURE, bdSignature);// 跳转到个人资料修改界面
         } else if (id == R.id.rl_head) {
             // 更换头像
             showTypeDialog();
@@ -312,6 +325,31 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
                         intent.putExtra("head", fileName);
                         sendBroadcast(intent);
                     }
+                }
+            case CHANGE_NICKNAME: // 个人资料修改界面回传过来的昵称数据
+                if (data != null) {
+                    new_info = data.getStringExtra("nickName");
+                    // 判断内容是否为空
+                    if (TextUtils.isEmpty(new_info)) {
+                        return;
+                    }
+                    tv_nickName.setText(new_info); // 更新UI显示
+                    // 更新数据库中的昵称字段
+                    DBUtils.getInstance(UserInfoActivity.this)
+                            .updateUserInfo("nickName", new_info, spUserName);
+                    // ↑ spUserName 是当前登录用户的用户名，按你项目已有变量名替换
+                }
+                break;
+            case CHANGE_SIGNATURE: // 个人资料修改界面回传过来的签名数据
+                if (data != null) {
+                    new_info = data.getStringExtra("signature");
+                    if (TextUtils.isEmpty(new_info)) {
+                        return;
+                    }
+                    tv_signature.setText(new_info); // 更新UI显示
+                    // 更新数据库中的签名字段
+                    DBUtils.getInstance(UserInfoActivity.this)
+                            .updateUserInfo("signature", new_info, spUserName);
                 }
                 break;
         }

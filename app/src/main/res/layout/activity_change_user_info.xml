@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    用户信息修改界面布局
+    外层为垂直方向的 LinearLayout，包含主标题栏和内容输入区域
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee"
+    android:orientation="vertical">
+
+    <!-- 主标题栏引用 -->
+    <include layout="@layout/main_title_bar" />
+
+    <!-- 内容区域：水平线性布局，左侧为输入框，右侧为删除按钮 -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <!-- 用户信息内容输入框 -->
+        <EditText
+            android:id="@+id/et_content"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:textColor="#737373"
+            android:textSize="14sp" />
+
+        <!-- 删除按钮（清空输入内容） -->
+        <ImageView
+            android:id="@+id/iv_delete"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
+            android:layout_marginLeft="-40dp"
+            android:src="@drawable/info_delete" />
+    </LinearLayout>
+</LinearLayout>
