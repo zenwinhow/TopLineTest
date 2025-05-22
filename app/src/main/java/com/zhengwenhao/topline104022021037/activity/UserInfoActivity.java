@@ -5,12 +5,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,10 +18,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 // ==== 动态权限相关导入 ====
-import android.Manifest;
 import android.content.pm.PackageManager;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+
 import androidx.annotation.NonNull;
 
 import com.zhengwenhao.topline104022021037.R;
@@ -50,7 +47,6 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
     private static final int SAVE_PHOTO = 5;  // 保存图片请求码
     private ImageViewRoundOval iv_photo; // 头像控件
     private Bitmap head;                 // 用户头像Bitmap
-    private static final String path = "/sdcard/TopLine/myHead/"; // sd卡路径，存头像
 
     // ==== 权限相关请求码 ====
     private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 1002; // 动态权限请求码
@@ -58,8 +54,6 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // ---- 优先检查并申请SD卡读写权限 ----
-        requestSDCardPermission();
 
         setContentView(R.layout.activity_user_info);
 
@@ -68,46 +62,6 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
         init();      // 初始化控件
         initData();  // 初始化数据
         setListener(); // 设置监听器
-    }
-
-    /**
-     * 检查并动态申请SD卡读写权限
-     * Android 6.0+必须动态申请，否则无法正常保存和读取头像等文件
-     * 只要用户没授权，部分功能会失效
-     */
-    private void requestSDCardPermission() {
-        // 判断是否已获得读写权限
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-            // 未授权则请求权限
-            ActivityCompat.requestPermissions(this,
-                    new String[] {
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.READ_EXTERNAL_STORAGE
-                    },
-                    REQUEST_CODE_WRITE_EXTERNAL_STORAGE);
-        }
-        // 已有权限则无需处理
-    }
-
-    /**
-     * 权限请求结果回调
-     * 用户授权后即可正常使用SD卡相关功能
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE_WRITE_EXTERNAL_STORAGE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // 权限已获得
-                Toast.makeText(this, "已获得SD卡读写权限", Toast.LENGTH_SHORT).show();
-            } else {
-                // 权限被拒绝
-                Toast.makeText(this, "SD卡读写权限被拒绝，部分功能将无法使用", Toast.LENGTH_LONG).show();
-            }
-        }
     }
 
     private void init() {
@@ -157,17 +111,25 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
         tv_user_name.setText(bean.getUserName());
         tv_sex.setText(bean.getSex());
         tv_signature.setText(bean.getSignature());
-        // 尝试加载头像
-        Bitmap bt = BitmapFactory.decodeFile(bean.getHead());
-        if (bt != null) {
-            // 将Bitmap转换为Drawable并显示
-            @SuppressWarnings("deprecation")
-            BitmapDrawable drawable = new BitmapDrawable(bt);
-            iv_photo.setImageDrawable(drawable);
+        // 头像路径（应为 setPicToView 返回的绝对路径）
+        String headPath = bean.getHead();
+        if (headPath != null) {
+            File headFile = new File(headPath);
+            if (headFile.exists()) {
+                Bitmap bitmap = BitmapFactory.decodeFile(headPath);
+                if (bitmap != null) {
+                    iv_photo.setImageBitmap(bitmap); // 直接显示bitmap，不需要再转Drawable
+                } else {
+                    iv_photo.setImageResource(R.drawable.default_head);
+                }
+            } else {
+                iv_photo.setImageResource(R.drawable.default_head);
+            }
         } else {
             iv_photo.setImageResource(R.drawable.default_head);
         }
     }
+
 
     /**
      * 设置控件的点击监听事件
@@ -239,8 +201,10 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
                 Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent2.putExtra(MediaStore.EXTRA_OUTPUT,
-                        Uri.fromFile(new File(Environment.getExternalStorageDirectory(), spUserName + "_head.jpg")));
+                File dir = getExternalFilesDir("myHead");
+                if (!dir.exists()) dir.mkdirs();
+                File tempFile = new File(dir, spUserName + "_head.jpg");
+                intent2.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
                 startActivityForResult(intent2, CROP_PHOTO2);
                 dialog.dismiss();
             }
@@ -300,36 +264,62 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case CROP_PHOTO1:
-                if (resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK && data != null) {
+                    // 相册选择图片后，返回的是Uri
                     cropPhoto(data.getData()); // 调用裁剪
                 }
                 break;
             case CROP_PHOTO2:
                 if (resultCode == RESULT_OK) {
-                    File temp = new File(Environment.getExternalStorageDirectory() + "/" + spUserName + "_head.jpg");
-                    cropPhoto(Uri.fromFile(temp));
+                    // 通过临时文件方式获取图片
+                    File dir = getExternalFilesDir("myHead");
+                    File tempFile = new File(dir, spUserName + "_head.jpg");
+                    cropPhoto(Uri.fromFile(tempFile));
                 }
                 break;
             case SAVE_PHOTO:
                 if (data != null) {
+                    // 有些情况下，返回的是Bitmap
                     Bundle extras = data.getExtras();
-                    head = extras.getParcelable("data");
-                    if (head != null) {
-                        String fileName = setPicToView(head);
-                        // 保存头像地址到数据库
-                        DBUtils.getInstance(UserInfoActivity.this).updateUserInfo("head", fileName, spUserName);
-                        iv_photo.setImageBitmap(head); // 显示新头像
-                        // 发送广播通知界面更新头像
-                        Intent intent = new Intent(UpdateUserInfoReceiver.ACTION.UPDATE_USERINFO);
-                        intent.putExtra(UpdateUserInfoReceiver.INTENT_TYPE.TYPE_NAME, UpdateUserInfoReceiver.INTENT_TYPE.UPDATE_HEAD);
-                        intent.putExtra("head", fileName);
-                        sendBroadcast(intent);
+                    if (extras != null) {
+                        head = extras.getParcelable("data");
+                        if (head != null) {
+                            String fileName = setPicToView(head);
+                            // 保存头像地址到数据库
+                            DBUtils.getInstance(UserInfoActivity.this).updateUserInfo("head", fileName, spUserName);
+                            iv_photo.setImageBitmap(head); // 显示新头像
+                            // 发送广播通知界面更新头像
+                            Intent intent = new Intent(UpdateUserInfoReceiver.ACTION.UPDATE_USERINFO);
+                            intent.putExtra(UpdateUserInfoReceiver.INTENT_TYPE.TYPE_NAME, UpdateUserInfoReceiver.INTENT_TYPE.UPDATE_HEAD);
+                            intent.putExtra("head", fileName);
+                            sendBroadcast(intent);
+                        } else {
+                            Toast.makeText(this, "没有获取到图片数据", Toast.LENGTH_SHORT).show();
+                        }
+                    } else if (data.getData() != null) {
+                        // 有些情况下返回的是Uri（如裁剪后返回Uri而不是Bitmap）
+                        Uri uri = data.getData();
+                        try {
+                            head = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                            String fileName = setPicToView(head);
+                            DBUtils.getInstance(UserInfoActivity.this).updateUserInfo("head", fileName, spUserName);
+                            iv_photo.setImageBitmap(head);
+                            Intent intent = new Intent(UpdateUserInfoReceiver.ACTION.UPDATE_USERINFO);
+                            intent.putExtra(UpdateUserInfoReceiver.INTENT_TYPE.TYPE_NAME, UpdateUserInfoReceiver.INTENT_TYPE.UPDATE_HEAD);
+                            intent.putExtra("head", fileName);
+                            sendBroadcast(intent);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Toast.makeText(this, "读取图片失败", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(this, "图片数据为空", Toast.LENGTH_SHORT).show();
                     }
                 }
-            case CHANGE_NICKNAME: // 个人资料修改界面回传过来的昵称数据
+                break;
+            case CHANGE_NICKNAME:
                 if (data != null) {
                     new_info = data.getStringExtra("nickName");
-                    // 判断内容是否为空
                     if (TextUtils.isEmpty(new_info)) {
                         return;
                     }
@@ -337,10 +327,9 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
                     // 更新数据库中的昵称字段
                     DBUtils.getInstance(UserInfoActivity.this)
                             .updateUserInfo("nickName", new_info, spUserName);
-                    // ↑ spUserName 是当前登录用户的用户名，按你项目已有变量名替换
                 }
                 break;
-            case CHANGE_SIGNATURE: // 个人资料修改界面回传过来的签名数据
+            case CHANGE_SIGNATURE:
                 if (data != null) {
                     new_info = data.getStringExtra("signature");
                     if (TextUtils.isEmpty(new_info)) {
@@ -354,6 +343,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
                 break;
         }
     }
+
 
     /**
      * 系统裁剪功能，调用系统裁剪图片界面
@@ -376,26 +366,27 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
      * 保存裁剪后的头像到SD卡，并返回保存路径
      * 需要有SD卡读写权限，否则写入失败
      */
-    private String setPicToView(Bitmap mBitmap) {
-        String sdStatus = Environment.getExternalStorageState();
-        if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检查sd卡可用
-            return "";
+    public String setPicToView(Bitmap mBitmap) {
+        // 推荐：保存到应用私有外部目录
+        File dir = getExternalFilesDir("myHead");
+        if (dir == null) {
+            Log.e("setPicToView", "外部存储不可用");
+            return null;
         }
+        if (!dir.exists()) dir.mkdirs();
+
+        String fileName = new File(dir, spUserName + "_head.jpg").getAbsolutePath();
         FileOutputStream b = null;
-        File file = new File(path);
-        file.mkdirs(); // 创建目录
-        String fileName = path + spUserName + "_head.jpg";
         try {
             b = new FileOutputStream(fileName);
-            mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, b); // 写入文件
+            mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         } finally {
             try {
-                if (b != null) {
-                    b.flush();
-                    b.close();
-                }
+                if (b != null) b.flush();
+                if (b != null) b.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
