@@ -23,6 +23,7 @@ import com.zhengwenhao.topline104022021037.R;
 import com.zhengwenhao.topline104022021037.adapter.MyFragmentPagerAdapter;
 import com.zhengwenhao.topline104022021037.fragment.CountFragment;
 import com.zhengwenhao.topline104022021037.fragment.HomeFragment;
+import com.zhengwenhao.topline104022021037.fragment.MeFragment;
 import com.zhengwenhao.topline104022021037.fragment.VideoFragment;
 
 import java.util.ArrayList;
@@ -76,11 +77,14 @@ public class MainActivity extends AppCompatActivity {
         HomeFragment homeFragment = new HomeFragment();
         CountFragment countFragment = new CountFragment();
         VideoFragment videoFragment = new VideoFragment();
+        MeFragment meFragment = new MeFragment();
 
         List<Fragment>alFragment = new ArrayList<Fragment>();
         alFragment.add(homeFragment);
         alFragment.add(countFragment);
         alFragment.add(videoFragment);
+        alFragment.add(meFragment);
+        viewPager.setOffscreenPageLimit(3); //三个界面直接来回切换都不会重新加载数据
 
         //ViewPager设置适配器
         viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), alFragment));
