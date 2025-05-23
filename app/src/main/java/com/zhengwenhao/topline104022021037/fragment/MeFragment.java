@@ -16,12 +16,12 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.zhengwenhao.topline104022021037.R;
 import com.zhengwenhao.topline104022021037.activity.CollectionActivity;
 import com.zhengwenhao.topline104022021037.activity.LoginActivity;
+import com.zhengwenhao.topline104022021037.activity.SettingActivity;
 import com.zhengwenhao.topline104022021037.receiver.UpdateUserInfoReceiver;
 import com.zhengwenhao.topline104022021037.utils.DBUtils;
 import com.zhengwenhao.topline104022021037.utils.UtilsHelper;
@@ -137,7 +137,9 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             }
         } else if (id == R.id.rl_setting) {
             if (isLogin) {
-                // TODO:跳转到“设置”界面
+                // 跳转到“设置”界面
+                Intent settingIntent = new Intent(getActivity(), SettingActivity.class);
+                startActivityForResult(settingIntent, 1);
             } else {
                 Toast.makeText(getActivity(), "您还未登录，请先登录", Toast.LENGTH_SHORT).show();
             }

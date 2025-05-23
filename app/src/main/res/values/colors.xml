@@ -12,4 +12,5 @@
     <color name="register_bg_color">#f6f6f6</color>
     <color name="register_hint_text_color">#a3a3a3</color>
     <color name="register_btn_color">#d6d7d7</color>
+    <color name="constellation_info_color">#333333</color>
 </resources>

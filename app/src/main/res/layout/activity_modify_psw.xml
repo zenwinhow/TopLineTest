@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 修改密码页面主布局：纵向排列，背景为注册页底色 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/register_bg_color"
+    android:orientation="vertical">
+
+    <!-- 通用标题栏（包含返回与标题） -->
+    <include layout="@layout/main_title_bar" />
+
+    <!-- 外层卡片，包裹输入框组，提升UI观感 -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="35dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="3dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true">
+
+        <!-- 嵌套布局，垂直方向排列原密码和新密码 -->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- 原密码输入框 -->
+            <EditText
+                android:id="@+id/et_original_psw"
+                android:layout_width="fill_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/register_edittext_top_radius"
+                android:drawableLeft="@drawable/psw_icon"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:hint="请输入原始密码"
+                android:inputType="textPassword"
+                android:paddingLeft="8dp"
+                android:textColor="#000000"
+                android:textColorHint="@color/register_hint_text_color"
+                android:textCursorDrawable="@null"
+                android:textSize="14sp" />
+
+            <!-- 分割线 -->
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider_line_color" />
+
+            <!-- 新密码输入框及密码显示/隐藏按钮 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!-- 新密码输入 -->
+                <EditText
+                    android:id="@+id/et_new_psw"
+                    android:layout_width="fill_parent"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/register_edittext_bottom_radius"
+                    android:drawableLeft="@drawable/psw_icon"
+                    android:drawablePadding="10dp"
+                    android:hint="请输入新密码"
+                    android:inputType="textPassword"
+                    android:paddingLeft="8dp"
+                    android:singleLine="true"
+                    android:textColor="#000000"
+                    android:textColorHint="#3a3a3a"
+                    android:textCursorDrawable="@null"
+                    android:textSize="14sp" />
+
+                <!-- 密码显示/隐藏小眼睛按钮 -->
+                <ImageView
+                    android:id="@+id/iv_show_psw"
+                    android:layout_width="15dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:src="@drawable/hide_psw_icon" />
+            </RelativeLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- 保存按钮 -->
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/register_btn_selector"
+        android:text="保存"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+</LinearLayout>

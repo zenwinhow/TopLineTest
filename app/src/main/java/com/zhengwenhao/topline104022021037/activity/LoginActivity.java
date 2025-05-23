@@ -125,7 +125,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             startActivityForResult(intent, 1);
 
         } else if (id == R.id.tv_forget_psw) {
-            // TODO:忘记密码，跳转相关页面（可实现）
+            // 忘记密码，跳转相关页面
+            Intent forget = new Intent(LoginActivity.this, FindPswActivity.class);
+            startActivity(forget);
         }
 
     }
