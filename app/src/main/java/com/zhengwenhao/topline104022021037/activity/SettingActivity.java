@@ -65,7 +65,9 @@ public class SettingActivity extends AppCompatActivity {
         rl_modify_psw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 跳转到“修改密码”界面
+                //跳转到“修改密码”界面
+                Intent intent = new Intent(SettingActivity.this, ModifyPswActivity.class);
+                startActivity(intent);
             }
         });
 
